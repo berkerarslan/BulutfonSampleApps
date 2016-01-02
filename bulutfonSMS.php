@@ -3,7 +3,7 @@
 * Bulutfon Api
 * SMS Gönderme
 */
-$token    = "e394a2fad7dedbf7bc88c40ea4fc89bd952a1d2106ee594d4bc4aa325f83ad22"; // Bulutfon panelinden alcağınız master token
+$token    = ""; // Bulutfon panelinden alcağınız master token
 $title    = "TUNC"; // Bulutfon üzerinden onaylattığınız sms başlığı
 
 

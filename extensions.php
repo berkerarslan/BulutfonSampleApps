@@ -3,7 +3,7 @@
 * Bulutfon Api
 * Dahili Listesi
 */
-$token      = "e394a2fad7dedbf7bc88c40ea4fc89bd952a1d2106ee594d4bc4aa325f83ad22"; // Bulutfon panelinden alcağınız master token
+$token      = ""; // Bulutfon panelinden alcağınız master token
 $url        = 'https://api.bulutfon.com/extensions?access_token='.$token;
 
 $curl = curl_init($url);
