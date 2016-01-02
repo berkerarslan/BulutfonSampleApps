@@ -2,14 +2,10 @@
 include "inc/config.php";
 
 if (@$_GET['download']){
-    $url    = 'https://api.bulutfon.com/incoming-faxes/'.$_GET['download'].'?access_token='.$token;
-    echo $url;
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-    $test = curl_exec($curl);
-    curl_close($curl);
+    $url    = 'https://api.bulutfon.com/incoming-faxes/'.$_GET['download'].'?';
+    header('Location: '.$url . http_build_query(array(
+            'access_token' => $token,
+        )));
 }
 
 
