@@ -7,8 +7,6 @@ if (@$_GET['download']){
             'access_token' => $token,
         )));
 }
-
-
 $url    = 'https://api.bulutfon.com/incoming-faxes?access_token='.$token;
 $curl = curl_init($url);
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -18,9 +16,6 @@ $curl_response = curl_exec($curl);
 curl_close($curl);
 $result = json_decode($curl_response, true);
 $faxes = $result['incoming_faxes'];
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,14 +64,6 @@ $faxes = $result['incoming_faxes'];
             </div>
         </li>
         <?php } ?>
-        <!--
-        <li>
-            <div class="sender">905068118260</div>
-            <div class="receiver">905068118260</div>
-            <div class="time">01.01.2016 - 23:30</div>
-            <div class="details"><span>DETAY</span></div>
-        </li>
-        -->
     </ul>
     <!-- Liste Bitiş -->
 </div>
@@ -87,7 +74,7 @@ $faxes = $result['incoming_faxes'];
     var options = {
         valueNames: [ 'receiver', 'sender', 'time' ]
     };
-    var hackerList = new List('container', options);
+    var faxlar = new List('container', options);
 </script>
 </body>
 </html>
