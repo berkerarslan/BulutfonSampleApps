@@ -4,6 +4,8 @@
  * Gelen Faxlar
  */
 include 'inc/config.php';
+
+// Dosyayı base64 kodlama biçimine dönüştürmemiz için gerekli yardımcı fonksiyon
 function prepareFaxAttachment($path) {
     $type = mime_content_type($path);
     $basename = basename($path, pathinfo($path, PATHINFO_EXTENSION));
@@ -11,22 +13,24 @@ function prepareFaxAttachment($path) {
     $base64 = 'data:'. $type . ';name:'. $basename .';base64:' . base64_encode($data);
     return $base64;
 }
-// Fax gönderme işlemi öncesinde yüklenecek olan dosyayı sunucuya kopyalıyoruz.
+
 if (@$_POST){
-    $dir        = 'files/';
-    $file       = $dir.basename($_FILES['file']['name']);
-    if (move_uploaded_file($_FILES['file']['tmp_name'],$file)){
-        $file   = prepareFaxAttachment($file);
+    $title          = $_POST['title']; // Formdan gelen fax başlığı
+    $receivers      = $_POST['receivers']; // Formdan gelen alıcı listesi
+    $did            = $_POST['did']; // Formdan gelen gönderilen numara
+    
+    $dir            = 'files/'; // Dosyamızın kopyalanacağı dizin. Bu dizinin izinleri 777 olacak şekilde ayarlanmalıdır. 
+    $file           = $dir.basename($_FILES['file']['name']); // Kopyalama işlemi öncesi gelen dosyanın nereye hangi isimle kayıt olacağını belirliyoruz.
+    if (move_uploaded_file($_FILES['file']['tmp_name'],$file)){ // Kopyalam işlemi
+        $file       = prepareFaxAttachment($file); // Base64 dönüşümü
     } else {
         die("Dosya aktarımı sırasında hata oluştu.");
     }
-    $url  = 'https://api.bulutfon.com/outgoing-faxes?access_token='.$token;
-    
-    // Curl isteği iletilmiyordu full parametre şeklinde ben de parametreleri jsona taşıdım.
-    
-    $data = array("title" => "Deneme", "receivers" => "903623630000", "did" => "902322290318", "attachment" => $file);                                                                    
-    $data_string = json_encode($data); 
-    $curl = curl_init($url);
+    $url            = 'https://api.bulutfon.com/outgoing-faxes?access_token='.$token; // Fax gönderme işlemini yapacağımız servis
+    // Elimizdeki verileri bir dizi değişkene aktararak post etmeye hazır hale getiriyoruz.
+    $data           = array("title" => $title, "receivers" => $receivers, "did" => $did, "attachment" => $file);
+    $data_string    = json_encode($data); // Bu dataları JSON formatına çeviriyoruz.
+    $curl           = curl_init($url);
     curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
     curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
@@ -38,7 +42,7 @@ if (@$_POST){
     );
     $curl_response = curl_exec($curl);
     curl_close($curl);
-    $result = json_decode($curl_response, true);
+    $result     = json_decode($curl_response, true);
     var_dump($result);
     die();
 }
