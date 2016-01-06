@@ -68,7 +68,7 @@ if (@$_POST){
         <input type="text" name="title" placeholder="Fax Başlığı">
         <small>Gönderilecek faxın başlığı.</small>
 
-        <input type="text" name="receivers" placeholder="Gönderilecek Numara">
+        <input type="text" name="did" placeholder="Gönderilecek Numara">
         <small>Faxın gönderileceği numara.</small>
 
         <input type="text" name="receivers" placeholder="Alıcılar">
