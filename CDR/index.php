@@ -7,6 +7,14 @@ if (isset($_GET['page'])){
     $page       = $_GET['page']; // Başka bir sayfaya tıklandıysa 1. sayfa yerine o sayfayı çektireceğiz.
 }
 
+// Ses Dosyasını Dinleme İşlemi
+if(isset($_GET['download'])){
+    $url    = 'https://api.bulutfon.com/call-records/'.$_GET['download'].'/stream?';
+    header('Location: '.$url . http_build_query(array(
+            'access_token' => $token,
+        )));
+}
+
 $url            = 'https://api.bulutfon.com/cdrs?limit='.$limit.'&page='.$page.'&access_token='.$token;
 $curl           = curl_init($url);
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -59,7 +67,7 @@ $pages          = $result['pagination']; // Sayfalama ve diğer bilgileri pages 
             <td>
                 <?php
                 if ($cdr['call_record']=="Var")
-                    echo '<a href="?download=">İndir</a>';
+                    echo '<a target="_blank" href="?download='.$cdr['uuid'].'">İndir</a>';
                 else
                     echo 'Yok';
                 ?>
